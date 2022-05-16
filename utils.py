@@ -6,6 +6,7 @@ def load_candidates():
     return data
 
 def code_html_main_page():
+    """Выдает список всех кандидатов на главной странице"""
     list_candidate = ""
     candidates = load_candidates()
     for candidate in candidates:
@@ -18,8 +19,14 @@ def code_html_main_page():
     return "<pre>" + list_candidate + "</pre>"
 
 def code_html_one_candidate(pk):
-    list_candidate = ""
+    """Проверяет наличие кандидата и по номеру кандидата выводит данные о нём"""
     candidates = load_candidates()
+    list_id_candidates = []
+    for candidate in candidates:
+        list_id_candidates.append(candidate["id"])
+    if pk not in list_id_candidates:
+        return "Такого нет"
+    list_candidate = ""
     for candidate in candidates:
         if pk == candidate["id"]:
             name_candidate = candidate["name"]
@@ -32,10 +39,18 @@ def code_html_one_candidate(pk):
     return f"<img src={picture_candidate}>" + "\n<pre>" + list_candidate + "</pre>"
 
 def code_html_skills(skill):
-    list_candidate = ""
+    """По навыку выбирает кандидатов"""
     candidates = load_candidates()
+    list_skills_candidates = []
     for candidate in candidates:
-        skills = candidate["skills"].lower()
+        skills = candidate["skills"].lower().strip().split(", ")
+        list_skills_candidates.extend(skills)
+    if skill not in list_skills_candidates:
+        return "Такого навыка нет"
+
+    list_candidate = ""
+    for candidate in candidates:
+        skills = candidate["skills"].lower().strip().split(", ")
         if skill in skills:
             name_candidate = candidate["name"]
             position_candidate = candidate["position"]
@@ -44,5 +59,4 @@ def code_html_skills(skill):
             list_candidate += f"{position_candidate}\n"
             list_candidate += f"{skills_candidate}\n"
     return "<pre>" + list_candidate + "</pre>"
-
-#print(code_html_main_page())
+#code_html_one_candidate()
